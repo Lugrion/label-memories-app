@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    networks:
+      - label-memories-app_network
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: label-memories-app
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      - label-memories-app_network
+    restart: always
+
+networks:
+  label-memories-app_network:
+    driver: bridge

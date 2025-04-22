@@ -1,16 +1,4 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mysql
-    networks:
-      - label-memories-app_network
-    restart: always
-
   mysql:
     image: mysql:8.0
     environment:

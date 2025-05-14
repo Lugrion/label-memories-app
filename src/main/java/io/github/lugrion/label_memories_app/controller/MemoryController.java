@@ -1,5 +1,6 @@
 package io.github.lugrion.label_memories_app.controller;
 
+import io.github.lugrion.label_memories_app.common.request.FilterRequest;
 import io.github.lugrion.label_memories_app.common.response.GeneralResponse;
 import io.github.lugrion.label_memories_app.dto.MemoryDTO;
 import org.springframework.http.ResponseEntity;
@@ -13,27 +14,32 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/dashboard")
+@RequestMapping("/api/v1/memory")
 public class MemoryController {
     private final MemoryService memoryService;
 
-    @PostMapping("/memory")
+    @PostMapping
     public ResponseEntity<MemoryDTO> createMemory(@RequestBody MemoryRequest payload) {
         return ResponseEntity.ok(memoryService.createMemory(payload));
     }
 
-    @GetMapping("/memory")
+    @GetMapping
     public ResponseEntity<Set<MemoryDTO>> getMemory() {
         return ResponseEntity.ok(memoryService.getMemories());
     }
 
-    @PatchMapping("/memory/{id}")
-    public ResponseEntity<MemoryDTO> patchMemory(@PathVariable final Long id, @RequestBody MemoryRequest payload) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<MemoryDTO> patchMemory(@PathVariable("id") final Long id, @RequestBody MemoryRequest payload) {
         return ResponseEntity.ok(memoryService.patchMemory(id, payload));
     }
 
-    @DeleteMapping("/memory/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<GeneralResponse> deleteMemory(@PathVariable("id") final Long id) {
         return ResponseEntity.ok(memoryService.deleteMemory(id));
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<Set<MemoryDTO>> filterMemoriesByLabels(@RequestBody final FilterRequest payload) {
+        return ResponseEntity.ok(memoryService.filterMemoriesByLabels(payload));
     }
 }

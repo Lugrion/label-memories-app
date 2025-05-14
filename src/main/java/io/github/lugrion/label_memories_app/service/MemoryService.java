@@ -1,8 +1,10 @@
 package io.github.lugrion.label_memories_app.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
+import io.github.lugrion.label_memories_app.common.request.FilterRequest;
 import io.github.lugrion.label_memories_app.common.response.GeneralResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -75,11 +77,23 @@ public class MemoryService {
         }
 
         if (payload.labelIds() != null) {
-            Set<Label> labels = labelRepository.findAllByUserDataIdAndIdIn(userData.getId(), payload.labelIds());
-            if (labels.isEmpty()) {
-                throw new EntityNotFoundException("Labels not found");
+            for (Label label : new HashSet<>(memory.getLabels())) {
+                label.getMemories().remove(memory);
             }
-            memory.setLabels(labels);
+
+            memory.getLabels().clear();
+
+            if (!payload.labelIds().isEmpty()) {
+                Set<Label> newLabels = labelRepository.findAllByUserDataIdAndIdIn(userData.getId(), payload.labelIds());
+                if (newLabels.isEmpty()) {
+                    throw new EntityNotFoundException("Labels not found");
+                }
+                memory.setLabels(newLabels);
+
+                for (Label label : newLabels) {
+                    label.getMemories().add(memory);
+                }
+            }
         }
 
         memoryRepository.save(memory);
@@ -100,5 +114,13 @@ public class MemoryService {
         memory.getLabels().clear();
         memoryRepository.deleteById(memoryId);
         return new GeneralResponse("Memory deleted properly");
+    }
+
+    public Set<MemoryDTO> filterMemoriesByLabels(final FilterRequest payload) {
+        UserData userData = userDataFetcher.getUserDataByAuth();
+        return dtoFactory.getMemoryDTOSet(memoryRepository.findByUserAndAllLabels(
+                userData.getId(),
+                payload.labelIds(),
+                (long) payload.labelIds().size()));
     }
 }

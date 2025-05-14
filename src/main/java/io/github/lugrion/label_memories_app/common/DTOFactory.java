@@ -15,7 +15,9 @@ public class DTOFactory {
     public MemoryDTO getMemoryDTO(Memory memory) {
         return new MemoryDTO(
                 memory.getId(),
-                memory.getName());
+                memory.getName(),
+                getLabelDTOSet(memory.getLabels())
+        );
     }
 
     public Set<MemoryDTO> getMemoryDTOSet(Set<Memory> memories) {
@@ -35,5 +37,4 @@ public class DTOFactory {
                 .map(this::getLabelDTO)
                 .collect(Collectors.toSet());
     }
-
 }

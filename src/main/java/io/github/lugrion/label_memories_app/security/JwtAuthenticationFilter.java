@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication == null) {
-                Optional<User> userOpt = this.userRepository.findById(userId);
+                Optional<User> userOpt = userRepository.findById(userId);
 
                 if (userOpt.isEmpty()) {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());

@@ -13,27 +13,27 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/dashboard")
+@RequestMapping("/api/v1/label")
 public class LabelController {
     private final LabelService labelService;
 
-    @PostMapping("/label")
+    @PostMapping
     public ResponseEntity<LabelDTO> createLabel(@RequestBody LabelRequest payload) {
         return ResponseEntity.ok(labelService.createLabel(payload));
     }
 
-    @GetMapping("/label")
+    @GetMapping
     public ResponseEntity<Set<LabelDTO>> getLabel() {
         return ResponseEntity.ok(labelService.getLabels());
     }
 
-    @PatchMapping("/label/{id}")
-    public ResponseEntity<LabelDTO> patchLabel(@PathVariable final Long id, @RequestBody LabelRequest payload) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<LabelDTO> patchLabel(@PathVariable("id") final Long id, @RequestBody LabelRequest payload) {
         return ResponseEntity.ok(labelService.patchLabel(id, payload));
     }
 
-    @DeleteMapping("/label/{id}")
-    public ResponseEntity<GeneralResponse> deleteLabel(@PathVariable final Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GeneralResponse> deleteLabel(@PathVariable("id") final Long id) {
         return ResponseEntity.ok(labelService.deleteLabel(id));
     }
 }

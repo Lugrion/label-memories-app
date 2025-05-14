@@ -31,5 +31,4 @@ public class AuthController {
     public ResponseEntity<LoginResponse> loginAccount(@RequestBody LoginRequest payload) {
         return ResponseEntity.ok(authService.loginAccount(payload));
     }
-
 }

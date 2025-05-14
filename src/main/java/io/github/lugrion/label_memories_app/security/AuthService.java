@@ -63,6 +63,10 @@ public class AuthService {
 
         String jwt = jwtService.generateToken(user);
 
-        return new LoginResponse("Bearer: " + jwt, "Login Success!");
+        return new LoginResponse(
+                jwt,
+                "Bearer",
+                jwtService.getExpirationTime()
+        );
     }
 }

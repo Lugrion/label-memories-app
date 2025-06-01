@@ -36,6 +36,7 @@ public class MemoryService {
         Memory memory = new Memory();
         memory.setName(payload.name());
         memory.setUserData(userData);
+        memory.setUrl(payload.url());
 
         if (!payload.labelIds().isEmpty()) {
 
@@ -55,6 +56,8 @@ public class MemoryService {
                 label.getMemories().add(memory); // Maintain bidirectional relationship
             }
         }
+
+
         memoryRepository.save(memory);
 
         return dtoFactory.getMemoryDTO(memory);

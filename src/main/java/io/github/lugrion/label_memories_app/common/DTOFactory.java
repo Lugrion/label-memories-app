@@ -16,6 +16,7 @@ public class DTOFactory {
         return new MemoryDTO(
                 memory.getId(),
                 memory.getName(),
+                memory.getUrl(),
                 getLabelDTOSet(memory.getLabels())
         );
     }
